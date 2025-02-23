@@ -1,0 +1,133 @@
+
+.navbar {
+    background-color: #0d6efd!important;
+    color: white !important;
+    padding: 10px 20px;
+    width: 100%; 
+    margin: 0 auto;
+    height: 8vh;
+}
+
+
+.navbar .container-fluid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar-link {
+    display: flex;
+    gap: 15px;
+    margin-left: 470px;
+}
+
+.sidebar-item {
+    transition: color 0.3s ease-in-out;
+}
+.sidebar-item span {
+    text-decoration: overline;
+    color: white;
+    text-decoration: none;
+}
+.collapse{
+    margin-left: 270px;
+}
+.sidebar-item:hover {
+    color: #ffeb3b;
+}
+.search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.form-control {
+    width: 250px;
+    border-radius: 8px;
+    border: 1px solid #069fff;
+    padding: 5px 10px;
+}
+.form-control:focus {
+    border: 1px solid #009dff !important; 
+    box-shadow: 0 0 8px rgba(0, 95, 153, 0.5) !important; 
+    outline: none !important; 
+    background-color: #f8f9fa;
+    transition: all 0.3s ease-in-out; 
+}
+.btn-outline-success,
+.btn-outline-danger {
+    color: white !important;
+    border-color: white !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-outline-success:hover,
+.btn-outline-danger:hover {
+    background-color: #1351c6 !important;
+    color: #ffffff !important;
+}
+.theme-btn {
+    height: 36px;  
+    padding: 10px 12px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    color: #007acc !important;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.theme-btn:hover {
+    background-color: #005f99 !important;
+    color: white !important;
+}
+.profiliconwhite {
+    width: 22px;
+    height: 22px;
+}
+.btn-settings {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+@media (max-width: 992px) {
+    .navbar {
+        max-width: 100%; 
+        border-radius: 0;
+        flex-direction: column;
+        height: auto;
+        padding: 15px;
+    }
+
+    .navbar .container-fluid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar-links {
+        display: flex;
+        gap: 15px;
+ 
+    }
+
+    .form-control {
+        width: 200px;
+    }
+
+    .search-container {
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+.icon {
+    height: 40px;
+    width: 40px;
+}
+
+.navbar-brand {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+

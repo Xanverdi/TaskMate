@@ -54,7 +54,6 @@ const Layout = () => {
   return (
     <div className="container">
       <div className="Title-container">Add a task</div>
-      
 
       <TextField
         label="Title"
@@ -73,70 +72,114 @@ const Layout = () => {
         onChange={handleChange}
         value={taskData.text}
         name="text"
-        style={{ marginTop: '20px' }}
+        style={{ marginTop: "20px" }}
       />
       <div className="function-todo">
-  <div className="btn-group">
-    <button className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-      <img src={calendar} style={{ width: '20px', height: '20px' }} alt="calendar" />
-    </button>
-    <ul className="dropdown-menu date">
-      <li>
-        <button onClick={() => setSelectedDate(dayjs())} className="dropdown-item">
-          Today
-        </button>
-      </li>
-      <li>
-        <button onClick={() => setSelectedDate(dayjs().add(1, 'day'))} className="dropdown-item">
-          Tomorrow
-        </button>
-      </li>
-      <li>
-        <button onClick={() => setSelectedDate(dayjs().add(7, 'day'))} className="dropdown-item">
-          Next week
-        </button>
-      </li>
-      <hr />
-      <li>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateField label="Pick a date" value={selectedDate} onChange={handleDateChange} />
-        </LocalizationProvider>
-      </li>
-    </ul>
-  </div>
+        <div className="btn-group">
+          <button
+            className="btn btn-primary dropdown-toggle"
+            data-bs-toggle="dropdown"
+          >
+            <img
+              src={calendar}
+              style={{ width: "20px", height: "20px" }}
+              alt="calendar"
+            />
+          </button>
+          <ul className="dropdown-menu date">
+            <li>
+              <button
+                onClick={() => setSelectedDate(dayjs())}
+                className="dropdown-item"
+              >
+                Today
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setSelectedDate(dayjs().add(1, "day"))}
+                className="dropdown-item"
+              >
+                Tomorrow
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setSelectedDate(dayjs().add(7, "day"))}
+                className="dropdown-item"
+              >
+                Next week
+              </button>
+            </li>
+            <hr />
+            <li>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateField
+                  label="Pick a date"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                />
+              </LocalizationProvider>
+            </li>
+          </ul>
+        </div>
 
-  <button className="createbutton  btn-primary" onClick={createTask}>Create</button>
-</div>
+        <button className="createbutton  btn-primary" onClick={createTask}>
+          Create
+        </button>
+      </div>
 
       {tasks.map((task) => (
         <TaskCard key={task.id} task={task} onOpenSidebar={onOpenSidebar} />
       ))}
 
-      <div className={`offcanvas offcanvas-end ${showSidebar ? "show" : ""}`} 
-          tabIndex="-1" 
-          id="offcanvasRight" 
-          aria-labelledby="offcanvasRightLabel"
-          data-bs-backdrop="static" 
-          data-bs-scroll="true"
-          style={{ position: "fixed", top: "0", height: "100vh", zIndex: "1050" }}
+      <div
+        className={`offcanvas offcanvas-end ${showSidebar ? "show" : ""}`}
+        tabIndex="-1"
+        id="offcanvasRight"
+        aria-labelledby="offcanvasRightLabel"
+        data-bs-backdrop="static"
+        data-bs-scroll="true"
+        style={{ position: "fixed", top: "0", height: "100vh", zIndex: "1050" }}
       >
         <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="offcanvasRightLabel">Task Details</h5>
-          <button type="button" className="btn-close" onClick={() => setShowSidebar(false)} aria-label="Close"></button>
+          <h5 className="offcanvas-title" id="offcanvasRightLabel">
+            Task Details
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setShowSidebar(false)}
+            aria-label="Close"
+          ></button>
         </div>
-        <div className="offcanvas-body">
+        <div className="offcanvas-body ">
           {selectedTask ? (
             <>
               <h5>Task title:</h5>
               <p>{selectedTask.title}</p>
+
               <h5>Task description:</h5>
               <p>{selectedTask.text}</p>
+
+              <h5>Deadline:</h5>
               <p>
-                <h5>Deadline:</h5> {selectedTask.deadline ? dayjs(selectedTask.deadline).format("DD-MM-YYYY") : "No Deadline"}
+                {selectedTask.deadline
+                  ? dayjs(selectedTask.deadline).format("DD-MM-YYYY")
+                  : "No Deadline"}
               </p>
-              <button className={`btn func ${tasks.important ? "btn-warning" : "btn-notimportant"}`} onClick={(e) => { e.stopPropagation(); dispatch(toggleImportant(tasks.id)); }}>
-           remove
-          </button>
+
+              <button
+                className={`btn func ${
+                  selectedTask.important ? "btn-warning" : "btn-notimportant"
+                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(toggleImportant(selectedTask.id));
+                }}
+              >
+                Remove
+              </button>
             </>
           ) : (
             <p>No Task Selected</p>

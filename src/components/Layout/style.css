@@ -171,3 +171,7 @@
     background-color: #007acc;
     color: white; 
 }
+.offcanvas {
+    top: 80px !important; /* Navbar'ın altında başlamasını sağlar */
+    height: calc(100vh - 60px); /* Navbar yüksekliği kadar azaltır */
+}

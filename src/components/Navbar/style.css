@@ -11,6 +11,10 @@
 .title-brand{
     font-size:large;
     font-weight: 600;
+    color: #f8f9fa;
+    &:hover{
+        color: #f8f9fa;
+    }
 }
 .navbar .container-fluid {
     display: flex;
@@ -161,6 +165,7 @@
     appearance: none;
     display: none;
   }
-  .logout-btn{
-    padding: 6px 8px;
+  .icon-logout{
+    width: 20px;
+    height: 20px;
   }

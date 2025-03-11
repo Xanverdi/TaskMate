@@ -15,10 +15,12 @@ const LoginForm = ({ setIsLoggedIn }) => {
     },
     validationSchema: LoginFormSchemas,
     onSubmit: (values) => {
+      console.log("Giriş denendi:", values);
+
       const savedUser = localStorage.getItem("user");
 
       if (!savedUser) {
-        alert("Kullanıcı bulunamadı!");
+        alert("User not found! Please register first.");
         return;
       }
 
@@ -30,18 +32,21 @@ const LoginForm = ({ setIsLoggedIn }) => {
           parsedUser.email === values.email &&
           parsedUser.password === values.password
         ) {
-          // Başarılı giriş
+          console.log("Giriş başarılı!");
           localStorage.setItem("isLoggedIn", "true");
-          setIsLoggedIn(true);
-          alert("Giriş başarılı! Ana sayfaya yönlendiriliyorsunuz...");
-          navigate("/");  // Ana sayfaya yönlendir
+          if (typeof setIsLoggedIn === "function") {
+            setIsLoggedIn(true);
+          } else {
+            console.error("setIsLoggedInnt func ");
+          }
+
+          alert("Login successful! You are being directed to the home page...");
+          navigate("/");  
         } else {
-          // Hatalı giriş
-          alert("Geçersiz e-posta veya şifre!");
+          alert("Invalid email or password!");
         }
       } catch (error) {
-        console.error("Hata oluştu:", error);
-        alert("Kullanıcı verisi hatalı!");
+        alert("User data is incorrect!");
       }
     },
   });
@@ -89,7 +94,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
 
       <div className="register-link">
         <p>
-        Don't have an account?<Link to="/register">Sign up</Link>
+          Don't have an account? <Link to='/register'>Sign up</Link>
         </p>
       </div>
     </form>

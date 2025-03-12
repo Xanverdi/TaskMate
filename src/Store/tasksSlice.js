@@ -1,10 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-// LocalStorage'dan veri çekme (Persist için)
 const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 const initialState = {
-  tasks: Array.isArray(savedTasks) ? savedTasks : [] // Eğer array değilse, boş array başlat
+  tasks: Array.isArray(savedTasks) ? savedTasks : [] 
 };
 
 const tasksSlice = createSlice({
@@ -13,10 +11,10 @@ const tasksSlice = createSlice({
   reducers: {
     addTask: (state, action) => {
       if (!Array.isArray(state.tasks)) {
-        state.tasks = [];  // Eğer array değilse, boş array başlat
+        state.tasks = []; 
       }
       state.tasks.push(action.payload);
-      localStorage.setItem("tasks", JSON.stringify(state.tasks)); // LocalStorage güncelle
+      localStorage.setItem("tasks", JSON.stringify(state.tasks));
     },
 
     deleteTask: (state, action) => {

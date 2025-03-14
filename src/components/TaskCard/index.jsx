@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteTask, toggleComplete, toggleImportant } from '../../Store/tasksSlice';
 import {useState} from 'react'
 import check from "./images/check.png";
@@ -7,11 +7,14 @@ import remove from "./images/delete.png";
 import star from './images/star.png';
 import starfill from './images/starfill.png'
 import checkfill from './images/checkfill.png'
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import dayjs from 'dayjs';
 import './style.css'
 const TaskCard = ({ task, onOpenSidebar }) => {  
   const dispatch = useDispatch();
-
+  const updateDate = useSelector((state)=>
+    state.tasks.tasks.find((t)=>t.id==task.id)
+  )
   return (
     <div
       className={`task-item ${task.completed ? "completed" : ""}`}
@@ -22,12 +25,12 @@ const TaskCard = ({ task, onOpenSidebar }) => {
       <span className={task.completed ? "completed-text" : ""}>{task.text}</span>
       </div>
       <div className="change-task">
-        <span className="deadline-span">
-          Deadline:{" "}
-          {task.deadline
-            ? dayjs(task.deadline).format("DD-MM-YYYY")
+        <div className="deadline-span">
+       <DateRangeIcon/>{" "}
+          {updateDate.deadline
+            ? dayjs(updateDate.deadline).format("DD-MM-YYYY")
             : "No Deadline"}
-        </span>
+        </div>
         <div className="buttons">
           <button
             className="btn btn-primary func"

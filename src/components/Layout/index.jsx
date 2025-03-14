@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import calendar from "./images/calendar.png";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import TextField from "@mui/material/TextField";
@@ -14,12 +13,16 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
 import "./style.css";
+import{updateNote, taskUpdateDeadline} from '../../Store/tasksSlice'
 import {
   addTask,
   toggleImportant,
   deleteTask,
   toggleComplete,
+  deleteFile,
+  addFile
 } from "../../Store/tasksSlice";
 import TaskCard from "../TaskCard";
 import { v4 as uuidv4 } from "uuid";
@@ -31,9 +34,22 @@ const Layout = () => {
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.tasks?.tasks || []);
   const [taskData, setTaskData] = useState({ title: "", text: "" });
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(dayjs());
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [file, setFile]=useState([])
+  const [noteText, setNoteText] = useState("");
+useEffect(() => {
+  if (selectedTask) {
+    setNoteText(selectedTask.note || ""); 
+  }
+}, [selectedTask]);
+
+const handleNoteChange = (e) => {
+  setNoteText(e.target.value);
+  dispatch(updateNote({ id: selectedTask.id, note: e.target.value }));
+};
+  const files = useSelector((state)=>state.tasks.files);
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -45,15 +61,38 @@ const Layout = () => {
     whiteSpace: 'nowrap',
     width: 1,
   });
-  
+  const handleAddnote =()=>{
+    if(!addnote.trim()) return
+    const newNote ={
+      id:uuidv4,
+      text:addnote,
+    }
+    dispatch(addNote(newNote))
+  }
   const handleChange = (e) => {
     setTaskData({ ...taskData, [e.target.name]: e.target.value });
   };
 
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
+    if (selectedTask) {
+      dispatch(taskUpdateDeadline({ id: selectedTask.id, deadline: newDate }));
+      setSelectedTask((prevTask) => ({ ...prevTask, deadline: newDate }));
+    }
+    setSelectedDate(newDate);
   };
-
+  const handleUploadFiles =(e)=>{
+    const uploadedFiles = Array.from(e.target.files).map((file) => ({
+      id: uuidv4(), 
+      name: file.name,
+      url: URL.createObjectURL(file),
+    }));
+  
+    dispatch(addFile(uploadedFiles)); 
+  }
+  const  handleDelete =(id)=>{
+    setFile(dispatch(deleteFile(id)));
+  }
   const createTask = () => {
     if (!taskData.title.trim() || !taskData.text.trim()) {
       return;
@@ -101,20 +140,19 @@ const Layout = () => {
       return prevTask;
     });
   };
-  const handleToggleCompleted =(taskId)=>{
-    if(!selectedTask)return;
+  const handleToggleCompleted = (taskId) => {
+    if (!selectedTask) return;
     dispatch(toggleComplete(taskId));
-    setSelectedTask((prevTask)=>{
-      if(prevTask && prevTask.id ===taskId){
-        return {
-          ...prevTask,
-          completed: !prevTask.completed,
-        };
-        return prevTask;
-      }
-    })
-  }
-  return (
+    setSelectedTask((prevTask) =>
+      prevTask && prevTask.id === taskId
+        ? { ...prevTask, completed: !prevTask.completed }
+        : prevTask
+    );
+  }; 
+
+ 
+  
+  return  (
     <div className="container">
       <div className="Title-container">Add a task</div>
       <TextField
@@ -237,8 +275,9 @@ const Layout = () => {
                   sx={{
                     marginBottom: "0px",
                     marginRight: "20px",
-                    color: "rgb(110, 110, 110)",
+                    color:"#0d6efd "
                   }}
+  
                 />
                 <div>{selectedTask.text}</div>
               </div>
@@ -247,7 +286,7 @@ const Layout = () => {
                   sx={{
                     marginRight: "20px",
                     marginBottom: "6px",
-                    color: "rgb(110, 110, 110)",
+                    color:"#0d6efd "
                   }}
                 />
                 {selectedTask.deadline ? (
@@ -259,6 +298,8 @@ const Layout = () => {
                         label="add a date"
                         size="small"
                         sx={{ width: "100px", height: "56px" }}
+                        value={selectedDate}
+                        onChange={handleDateChange}
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -295,8 +336,9 @@ const Layout = () => {
                 variant="contained"
                 tabIndex={-1}
                 startIcon={
-                  <CloudUploadIcon sx={{ color: "rgb(110, 110, 110)" }} />
+                  <CloudUploadIcon sx={{ color:"#0d6efd " }} />
                 }
+                
                 sx={{
                   backgroundColor: "white",
                   textTransform: "none",
@@ -317,14 +359,40 @@ const Layout = () => {
               >
                 Add a file
                 <VisuallyHiddenInput
-                  type="file"
-                  onChange={(event) => console.log(event.target.files)}
-                  multiple
-                />
+                   type="file"
+                   multiple
+                   onChange={handleUploadFiles} 
+                    />
+                       
               </Button>
+              <div className="listfiles">
+                {files.map((file) => (
+                  <div
+                     key={file.id}
+                     style={{
+                     display: "flex",
+                     alignItems: "center",
+                     justifyContent: "space-between",
+                     padding: "8px",
+                     borderBottom: "1px solid #ddd",
+               }}
+               className="list-item"
+               >
+                    <span>{file.name}</span>
+                    <Button
+              onClick={() => handleDelete(file.id)}
+                  sx={{ minWidth: "auto", padding: "0", color: "grey" }}
+                  >
+                            < DeleteIcon />
+                     </Button>
+                    </div>
+                   ))}
+                   </div>
               <div className="note-area">
-                  <div style={{marginBottom:'3px'}}>Add a note</div>
-                  <textarea style={{width:'100%'}}/>
+                  <div style={{marginBottom:'3px'}}><AddIcon sx={{ color:"#0d6efd "}}/> Add note</div>
+                  <textarea style={{width:'100%'}}
+                  value={noteText}
+                  onChange={handleNoteChange}/>
               </div>
             </>
           ) : (
@@ -334,6 +402,5 @@ const Layout = () => {
       </div>
     </div>
   );
-};
-
+}
 export default Layout;

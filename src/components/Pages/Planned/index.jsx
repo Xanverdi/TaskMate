@@ -2,17 +2,29 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import TaskCard from '../../TaskCard'
 import Layout from '../../Layout'
+import './style.css'
+import dayjs from 'dayjs';
+import  SortedTask from '../../FilterDropdown'
 const Planned = () => {
     const tasks = useSelector((state) => state.tasks?.tasks || []);
-    const plannedTasks = tasks.filter((task) => task.deadline !== null);
+    const plannedTasks = tasks.filter(
+      (task)=>task.deadline && dayjs(task.deadline).isValid()
+    );
   
     return (
-      <div className='container'>
+      <div className='container-planned-task'>
+        <div className='Title-planned-task'>
         <h1>Planned Tasks</h1>
-        <Layout/>
-        <h3>Planned Tasks</h3>
+        </div>
+        <div className='container'>
+         {plannedTasks.length > 0 ?
+          <SortedTask />:''
+         }
+        
+        </div>
+       
         {plannedTasks.length > 0 ? (
-          <div>
+          <div className='planned-task'>
             {plannedTasks.map((task) => (
               <TaskCard key={task.id} task={task} />
             ))}

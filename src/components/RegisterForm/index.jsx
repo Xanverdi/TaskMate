@@ -24,7 +24,7 @@ const RegisterForm = ({ onRegister }) => {
 
       alert("Registration successful! You are being directed to the home page...");
       if (onRegister) onRegister();
-      navigate("/");
+      navigate("/today");
     },
   });
 

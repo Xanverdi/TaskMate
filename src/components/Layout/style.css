@@ -8,7 +8,7 @@
 
 .tittle {
     width: 100%;
-    max-width: 700px;
+    max-width: 1000px;
     margin-bottom: 15px;
 }
 .createbutton {
@@ -38,9 +38,10 @@
     width: 100%;
     max-width: 700px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     margin-top: 15px;
+    margin-left:25%;
 }
 
 .func {
@@ -217,3 +218,4 @@ align-items: center;
     flex-direction: column;
     align-items:start;
   }
+ 

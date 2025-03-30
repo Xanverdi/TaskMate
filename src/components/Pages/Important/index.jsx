@@ -1,27 +1,22 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import TaskCard from '../../TaskCard';
-import Layout from '../../Layout';
-import './style.css'
+import './style.css';
+import  SortedTask from '../../FilterDropdown'
 const Important = () => {
   const tasks = useSelector((state) => state.tasks?.tasks || []);
-
+  const importantTasks = tasks.filter(task => task.important); 
   return (
     <>
-    <div className='title'><h1>Important </h1></div>
-      <Layout /> 
+      <div className='title'>
+        <h1>Important Tasks</h1>
+      </div>
       <div className="container">
-        <h4>Important Tasks</h4>
-
-        {tasks.length > 0 ? (
-          tasks.map((task) => {
-            if (task.important) {
-              return <TaskCard key={task.id} task={task} />;
-            }
-            return null;
-          })
+      {importantTasks.length > 0 ?  <SortedTask />:''}
+        {importantTasks.length > 0 ? (
+          importantTasks.map(task => <TaskCard key={task.id} task={task} />)
         ) : (
-          <p>No important tasks!</p> 
+          <p>No important tasks!</p>
         )}
       </div>
     </>

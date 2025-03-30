@@ -15,8 +15,6 @@ const LoginForm = ({ setIsLoggedIn }) => {
     },
     validationSchema: LoginFormSchemas,
     onSubmit: (values) => {
-      console.log("Giriş denendi:", values);
-
       const savedUser = localStorage.getItem("user");
 
       if (!savedUser) {
@@ -37,23 +35,27 @@ const LoginForm = ({ setIsLoggedIn }) => {
           if (typeof setIsLoggedIn === "function") {
             setIsLoggedIn(true);
           } else {
-            console.error("setIsLoggedInnt func ");
+  
           }
 
           alert("Login successful! You are being directed to the home page...");
-          navigate("/");  
+          navigate("/today"); 
         } else {
           alert("Invalid email or password!");
         }
       } catch (error) {
         alert("User data is incorrect!");
+  
       }
     },
   });
 
   return (
-    <form className="loginform" onSubmit={formik.handleSubmit}>
+    <div className='login-page'>
+<form className="loginform" onSubmit={formik.handleSubmit}>
       <div className='titlelogin'>Login</div>
+
+      {/* Email Input */}
       <div className="input-container">
         <label>E-mail</label>
         <input
@@ -83,6 +85,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
           <div className="error-message">{formik.errors.password}</div>
         )}
       </div>
+
       <Button 
         className="login-button" 
         variant="contained" 
@@ -91,13 +94,14 @@ const LoginForm = ({ setIsLoggedIn }) => {
       >
        Login
       </Button>
-
       <div className="register-link">
         <p>
           Don't have an account? <Link to='/register'>Sign up</Link>
         </p>
       </div>
     </form>
+    </div>
+    
   );
 };
 

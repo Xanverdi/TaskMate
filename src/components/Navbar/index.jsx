@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchTerm } from '../../Store/uiSlice';
-import logout from './images/logout.png';
+import { Link, useNavigate } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { IoSearch } from "react-icons/io5";
 import icon from './images/todo.png';
 import './style.css';
-import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -13,16 +14,13 @@ const Navbar = () => {
   const [searchInput, setSearchInput] = useState(searchTerm || "");
 
   useEffect(() => {
-    setSearchInput(searchTerm); // Redux state değişince input güncellensin
+    setSearchInput(searchTerm);
   }, [searchTerm]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    
     if (!searchInput.trim()) return;
-
     dispatch(setSearchTerm(searchInput));
-
     if (window.location.pathname !== "/searchtasks") {
       navigate('/searchtasks');
     }
@@ -31,55 +29,54 @@ const Navbar = () => {
   const clearSearch = () => {
     setSearchInput("");
     dispatch(setSearchTerm(""));
-
     if (window.location.pathname !== "/") {
-      navigate('/');
+      navigate('/today');
     }
   };
 
-  return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-        <Link className="navbar-brand d-flex align-items-center" to="/">
-          <img className="icon me-2" src={icon} alt="Todo icon"/>
-          <span className="title-brand">To Do</span>
-        </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+  const handleLogout = () => {
+    navigate("/login");
+  };
 
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <div className="navbar-link d-flex">
-            <Link className="sidebar-itemnav" to="/">Today</Link>
-            <Link className="sidebar-itemnav" to="/important">Important</Link>
-            <Link className="sidebar-itemnav" to="/planned">Planned</Link>
-            <Link className="sidebar-itemnav" to="/tasks">Tasks</Link>
-            <Link className="sidebar-itemnav" to="/fullfiledtasks">Fulfilled</Link>
-          </div>
-          <form className="d-flex ms-auto search-form" role="search" onSubmit={handleSearch}>
-            <div className="search-input-wrapper">
-              <input
-                className="form-control search-input"
-                type="search"
-                placeholder="Search"
-                name="search" 
-                id="search" 
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-              />
-              {searchInput && (
-                <span className="clear-icon" onClick={clearSearch}>&#10005;</span> 
-              )}
-            </div>
-            <button className="btn btn-outline-success ms-1" type="submit">
-              Search
-            </button>
-          </form>
-          <button type="button" className="btn btn-outline-danger ms-3">
-            Logout
-          </button>
-        </div>
+  return (
+    <nav className="navbar">
+      <div className="navbar-brand">
+        <img className="icon" src={icon} alt="Todo icon" />
+        <span className="title-brand">TaskMate</span>
       </div>
+
+      <div className="navbar-link">
+        <Link to="/today">Today</Link>
+        <Link to="/important">Important</Link>
+        <Link to="/planned">Planned</Link>
+        <Link to="/tasks">Tasks</Link>
+        <Link to="/fullfiledtasks">Fulfilled</Link>
+      </div>
+ <div className='searc-log'>
+ <form className="search-form" role="search" onSubmit={handleSearch}>
+        <div className="search-input-wrapper">
+          <input
+            className="search-input"
+            type="search"
+            placeholder="Search"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+          {searchInput && (
+            <span className="clear-icon" onClick={clearSearch}>&#10005;</span>
+          )}
+        </div>
+        <button className="btn btn-outline-success search" type="submit">
+          <IoSearch />
+        </button>
+      </form>
+
+      <button type="button" className="btn btn-outline-danger" onClick={handleLogout}>
+        <LogoutIcon />
+        <div className="logout">Logout</div>
+      </button>
+ </div>
+     
     </nav>
   );
 };

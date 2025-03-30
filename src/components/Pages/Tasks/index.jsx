@@ -1,15 +1,22 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import TaskCard from '../../TaskCard';
-import Layout from '../../Layout'
+import './style.css'
+import  SortedTask from '../../FilterDropdown'
 const Tasks = () => {
   const tasks = useSelector((state) => state.tasks?.tasks || []);
 
   return (
     <div className="container">
         
+      <div className='Tittle-all-tasks'>
       <h1>All Tasks</h1>
-      <Layout/>
+      </div>
+      <div className='container'>
+       {
+        tasks.length ?  <SortedTask />:''
+       }
+        </div>
       {tasks.length ? (
         tasks.map((task) => <TaskCard key={task.id} task={task} />)
       ) : (

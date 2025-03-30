@@ -15,6 +15,7 @@ const RegisterForm = ({ onRegister }) => {
       email: '',
       password: '',
       confirmPassword: '',
+      
     },
     validationSchema: RegisterFormSchemas,
     onSubmit: (values) => {

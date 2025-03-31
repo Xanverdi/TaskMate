@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import TaskCard from '../../TaskCard'
-import Layout from '../../Layout'
 import './style.css'
 import dayjs from 'dayjs';
 import  SortedTask from '../../FilterDropdown'
@@ -30,7 +29,7 @@ const Planned = () => {
             ))}
           </div>
         ) : (
-          <div>No tasks</div>
+          <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>No tasks</div>
         )}
       </div>
     );

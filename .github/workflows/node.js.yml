@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-      fail-fast: false  # Biri uğursuz olsa belə digərləri davam etsin
+      fail-fast: false
 
     steps:
       - name: 📥 Checkout repository
@@ -25,19 +25,25 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: 📦 Install dependencies (npm ci)
+      - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🛠️ Build project (if build script exists)
+      - name: 🛠️ Build project
         run: npm run build --if-present
 
-      - name: 🧪 Run tests and output JSON result
+      - name: 📁 Create test-results directory
+        run: mkdir -p test-results
+
+      - name: 🧪 Run tests and generate JSON result
         run: |
-          mkdir -p test-results
-          npx jest --json --outputFile=test-results/results-${{ matrix.node-version }}.json || true
+          npx jest --json --outputFile=test-results/results-${{ matrix.node-version }}.json
+        continue-on-error: true
 
       - name: 📤 Upload test results as artifact
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.node-version }}
           path: test-results/results-${{ matrix.node-version }}.json
+
+      - name: 📂 Debug: list test-results content
+        run: ls -lah test-results

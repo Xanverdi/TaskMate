@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
     "@mui/icons-material": "^6.4.5",
     "@mui/material": "^6.4.5",
+    "@mui/styled-engine": "^5.8.0",
     "@mui/x-date-pickers": "^7.27.0",
     "@reduxjs/toolkit": "^2.5.1",
     "bootstrap": "^5.3.3",

@@ -35,8 +35,7 @@ jobs:
         run: mkdir -p test-results
 
       - name: 🧪 Run tests and generate JSON result
-        run: |
-          npx jest --json --outputFile=test-results/results-${{ matrix.node-version }}.json
+        run: npx jest --json --outputFile=test-results/results-${{ matrix.node-version }}.json
         continue-on-error: true
 
       - name: 📤 Upload test results as artifact

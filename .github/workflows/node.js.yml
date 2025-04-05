@@ -16,33 +16,33 @@ jobs:
       fail-fast: false
 
     steps:
-      - name: 📥 Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: 🛠️ Build project
+      - name: Build project
         run: npm run build --if-present
 
-      - name: 📁 Create test-results directory
+      - name: Create test-results directory
         run: mkdir -p test-results
 
-      - name: 🧪 Run tests and generate JSON result
+      - name: Run tests and generate JSON result
         run: npx jest --json --outputFile=test-results/results-${{ matrix.node-version }}.json
         continue-on-error: true
 
-      - name: 📤 Upload test results as artifact
+      - name: Upload test results as artifact
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.node-version }}
           path: test-results/results-${{ matrix.node-version }}.json
 
-      - name: 📂 Debug: list test-results content
+      - name: Debug - list test-results content
         run: ls -lah test-results
